@@ -1,4 +1,4 @@
-class Ingredient:
+class Ingredient: #1.1
     
     def __init__(self, name: str, quantity: float, unit: str):
         self.name = name
@@ -25,7 +25,7 @@ class Ingredient:
             return False
         return self.name == other.name and self.unit == other.unit
     
-class Recipe:
+class Recipe: #1.2
     
     def __init__(self, title: str, ingredients=None):
         self.title = title
@@ -66,3 +66,18 @@ class Recipe:
         for x in self.ingredients:
             result += f"  {x}\n"
         return result
+class DietaryRecipe(Recipe):
+    
+    def __init__(self, title: str, diet_type: str, ingredients=None):
+        super().__init__(title, ingredients)
+        self.diet_type = diet_type
+    
+    def scale(self, ratio: float):
+        if not Recipe.is_valid_ratio(ratio):
+            raise ValueError("Ratio должен быть положительным")
+        
+        new_recipe = super().scale(ratio)
+        return DietaryRecipe(new_recipe.title, self.diet_type, new_recipe.ingredients)
+    
+    def __str__(self):
+        return f"[{self.diet_type}] {super().__str__()}"
